@@ -1,29 +1,26 @@
-const form = document.querySelector('#espresso-menu-form');
-
-
 function createElement(htmlString) {
-    const div = document.createElement('div');
-    div.innerHTML = htmlString;
+  const div = document.createElement('div');
+  div.innerHTML = htmlString;
 
-    return div.firstChild;
+  return div.firstChild;
 }
 
 function menuItemTmpl(name) {
-    return `<li class="menu-list-item d-flex items-center py-2">
-    <span class="w-100 pl-2 menu-name">${name}</span>
-    <button
-      type="button"
-      class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
-    >
-      수정
-    </button>
-    <button
-      type="button"
-      class="bg-gray-50 text-gray-500 text-sm menu-remove-button"
-    >
-      삭제
-    </button>
-  </li>`
+  return `<li class="menu-list-item d-flex items-center py-2">
+  <span class="w-100 pl-2 menu-name">${name}</span>
+  <button
+    type="button"
+    class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
+  >
+    수정
+  </button>
+  <button
+    type="button"
+    class="bg-gray-50 text-gray-500 text-sm menu-remove-button"
+  >
+    삭제
+  </button>
+</li>`
 }
 
 
@@ -37,55 +34,66 @@ function menuItemTmpl(name) {
 // event delegate pattern (event delegation)
 
 let count = 0;
+const form = document.querySelector('#espresso-menu-form');
+const menuName = document.querySelector('.menu-name');
 // const count = document.querySelector('.menu-count');
 const menuList = document.querySelector('#espresso-menu-list');
 form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    
-    
+  event.preventDefault();
+  
+  
 
-    // const menuList = document.querySelector('#espresso-menu-list');
-    const input = document.querySelector('#espresso-menu-name');
-    const inputValue = input.value.trim();
-    if (inputValue.length === 0) {
-        return;
-    } 
+  // const menuList = document.querySelector('#espresso-menu-list');
+  const input = document.querySelector('#espresso-menu-name');
+  const inputValue = input.value.trim();
+  if (inputValue.length === 0) {
+      return;
+  } 
 
-    menuList.insertAdjacentElement('afterbegin', createElement(menuItemTmpl(inputValue)));
+  menuList.insertAdjacentElement('afterbegin', createElement(menuItemTmpl(inputValue)));
 
-    input.value = '';
-    
-    counter();
+  input.value = '';
 
+  renderCounter();
 });
 
-function counter(){
 
-  if(menuList !== null){
-    for(let i=0; i<=menuList.length; i++){
-      count++;
-    }
-  }
-  return count;
+
+function counterTmpl (count) {
+return `<span>총 ${count}개</span>`
 }
+function renderCounter() {
+    const counter = document.querySelectorAll('.menu-list-item').length; 
+
+    const menuCount = document.querySelector('.menu-count');
+    menuCount.innerHTML = counterTmpl(counter);
+}
+
+
+
 
 function clickHandler(event){
-  let elem = event.target;
-  if(elem.classList.contains('menu-edit-button')){
-    let editVal = prompt('무엇으로 바꾸시겠습니까?','');
-    if(editVal != null){
-      document.querySelector('.menu-name').innerHTML = editVal;
-    }
-  }
-
-  if(elem.classList.contains('menu-remove-button')){
-    let removeAgree = confirm('삭제하시겠습니까?')
-    if(removeAgree) {
-      return document.querySelector('.menu-list-item').remove();
-      // console.log(count--);
-    }
-  }
+let targetBtn = event.target;
+let targetLi = targetBtn.parentNode;
+// let targetLi = targetBtn.previousSibling;
+if(targetBtn.classList.contains('menu-edit-button')){
+      let editVal = prompt('무엇으로 바꾸시겠습니까?','');
+      if(editVal != null){
+        targetLi.innerHTML = editVal;
+      }
 }
-menuList.addEventListener('click',clickHandler);
 
+if(targetBtn.classList.contains('menu-remove-button')){
+      let removeAgree = confirm('삭제하시겠습니까?')
+      if(removeAgree) {
+        targetLi.remove();
+        renderCounter();
+      }
+}
+}
+
+
+document.addEventListener('DOMContentLoaded',function(){
+menuList.addEventListener('click',clickHandler);
+});
 
