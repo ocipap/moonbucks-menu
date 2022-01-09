@@ -58,6 +58,7 @@ function init() {
   let count = 0;
   const form = document.querySelector("#espresso-menu-form");
   const menuList = document.querySelector("#espresso-menu-list");
+  const submitBtn = document.querySelector("#espresso-menu-submit-button"); 
 
   function renderCounter() {
     const counter = document.querySelectorAll(".menu-list-item").length;
@@ -113,7 +114,7 @@ function init() {
   delegate("click", ".menu-remove-button", removeHandler, menuList);
 
   form.addEventListener("submit", submitHandler);
-  // menuList.addEventListener("click", clickHandler);
+  submitBtn.addEventListener("click", submitHandler);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
