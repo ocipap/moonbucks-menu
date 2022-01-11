@@ -7,6 +7,12 @@ function menuItemTmpl(name) {
   <span class="w-100 pl-2 menu-name">${name}</span>
   <button
     type="button"
+    class="bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button"
+  >
+    품절
+  </button>
+  <button
+    type="button"
     class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
   >
     수정
@@ -67,7 +73,12 @@ function init() {
     menuCount.innerHTML = counterTmpl(counter);
   }
 
- 
+  function soldOutHandler({event, element: 버튼}){
+    const liElement3 = 버튼.closest(".menu-list-item");
+    const nameElement2 = liElement3.querySelector(".menu-name");
+
+    nameElement2.classList.add("sold-out");
+  }
 
   function editHandler({ event, element: 버튼 }) { 
     const liElement = 버튼.closest(".menu-list-item"); //타겟이 일어난 버튼과 가까이 있는 부모 li 
@@ -106,6 +117,8 @@ function init() {
 
     renderCounter();
   }
+  //품절
+  delegate("click",".menu-sold-out-button",soldOutHandler,menuList);
 
   // 수정을 하면은 prompt 가 뜨고 이후 수정후에 해당 돔이 변경
   delegate("click", ".menu-edit-button", editHandler, menuList);
