@@ -92,8 +92,7 @@ function init() {
 
   function removeHandler({ event, element: 버튼 }) { 
     const liElement2 = 버튼.closest(".menu-list-item"); 
-    let removeAgree = confirm('삭제하시겠습니까?');
-    if (removeAgree) { // true면
+    if (confirm('삭제하시겠습니까?')) { // true면
       liElement2.remove(); //타겟 li 삭제
       renderCounter();
     }
