@@ -133,6 +133,8 @@ document.addEventListener("DOMContentLoaded", function () {
   init();
 });
 
+console.log(`hello`);
+
 // 1. 브라우져 렌더링 과정
 // dom tree cssom tree render tree
 // script tag (defer async)
