@@ -185,9 +185,7 @@ function addMenu() {
       name: 'cool-jung'
   };
   const copyEspressoMenuList = [...espressoMenuList.espresso,newMenu];
-  localStorage.setItem('espresso',JSON.stringify({
-      espresso: copyEspressoMenuList
-  }));
+  localStorageSetItem({espresso,copyEspressoMenuList});
 }
 addMenu();
 
@@ -200,9 +198,8 @@ function removeMenu() {
       return element.id !== deleteMenuId;
   });
   console.log(removeMenuList);
-  localStorage.setItem('espresso',JSON.stringify({
-      espresso:removeMenuList
-  }))
+  
+  localStorageSetItem({espresso,removeMenuList});
 }
 removeMenu();
 
@@ -222,10 +219,7 @@ function editMenu(){
       }
   });
   console.log(updatedName);
-  localStorage.setItem('espresso',JSON.stringify({
-      espresso:updatedName
-  }))
-  
+  localStorageSetItem({espresso,updatedName});
 }
 editMenu();
 
@@ -235,3 +229,7 @@ function loging(){
 
   console.log(espressoMenuList);
 }
+
+function localStorageSetItem({key,val}){
+  localStorage.setItem('espresso',JSON.stringify({key:val}));
+} 
