@@ -209,19 +209,21 @@ removeMenu();
 // 메뉴 수정
 function editMenu(){
   const espressoMenuList = JSON.parse(localStorage.getItem('espresso'));
-  const copyEspressoMenuList = [...espressoMenuList.espresso];
   const editMenu = {
       id: 2,
       name: 'luya'
   };
-  
-  const editMenuPicker = espressoMenuList.espresso.filter((element)=>{
-      return element.id == editMenu.id;
+  const updatedName = espressoMenuList.espresso.map((element)=>{
+      if(element.id == 2){
+          element.name = editMenu.name;
+          return element;
+      }else{
+          return element;
+      }
   });
-  editMenuPicker[0].name = editMenu.name;
-  const newMenuList = copyEspressoMenuList;
+  console.log(updatedName);
   localStorage.setItem('espresso',JSON.stringify({
-      espresso:newMenuList
+      espresso:updatedName
   }))
   
 }
