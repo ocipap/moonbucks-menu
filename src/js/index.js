@@ -211,12 +211,7 @@ function editMenu(){
       name: 'luya'
   };
   const updatedName = espressoMenuList.espresso.map((element)=>{
-      if(element.id == 2){
-          element.name = editMenu.name;
-          return element;
-      }else{
-          return element;
-      }
+      element.id == 2 ? {...element, name: editMenu.name} : element;
   });
   console.log(updatedName);
   localStorageSetItem({key:'espresso', val:updatedName});
