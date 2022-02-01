@@ -219,7 +219,7 @@ function editMenu(){
       }
   });
   console.log(updatedName);
-  localStorageSetItem({espresso,updatedName});
+  localStorageSetItem({key:'espresso', val:updatedName});
 }
 editMenu();
 
@@ -231,5 +231,5 @@ function loging(){
 }
 
 function localStorageSetItem({key,val}){
-  localStorage.setItem('espresso',JSON.stringify({key:val}));
+  localStorage.setItem('espresso',JSON.stringify({[key]:val}));
 } 
