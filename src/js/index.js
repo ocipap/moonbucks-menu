@@ -107,7 +107,15 @@ function init() {
       event,
       element: 버튼
   }) {
+      const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
       const liElement = 버튼.closest(".menu-list-item");
+      console.log(liElement.id);
+      console.log(typeof liElement.id);
+      const removeMenuList = espressoMenuList.espresso.filter((element)=>{
+          return element.id !== parseInt(liElement.id);
+      });
+      localStorageSetItem({key:'espresso',val:removeMenuList});
+
       if (confirm('삭제하시겠습니까?')) { // true면
           liElement.remove(); //타겟 li 삭제
           renderCounter();
