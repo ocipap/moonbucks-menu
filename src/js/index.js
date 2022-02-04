@@ -117,11 +117,20 @@ function init() {
   function submitHandler(event) {
       event.preventDefault();
 
+      const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
       const input = document.querySelector("#espresso-menu-name");
       const inputValue = input.value.trim();
       if (inputValue.length === 0) {
           return;
       }
+
+      const newMenu = {
+          id: Date.now(),
+          name: inputValue
+      };
+
+      const copyEspressoMenuList = [...espressoMenuList.espresso,newMenu];
+      localStorageSetItem({key:'espresso',val:copyEspressoMenuList});
 
       menuList.insertAdjacentElement(
           "afterbegin",
