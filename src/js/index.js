@@ -84,8 +84,8 @@ function init() {
       event,
       element: 버튼
   }) {
-      const liElement3 = 버튼.closest(".menu-list-item");
-      const nameElement2 = liElement3.querySelector(".menu-name");
+      const liElement = 버튼.closest(".menu-list-item");
+      const nameElement2 = liElement.querySelector(".menu-name");
 
       nameElement2.classList.add("sold-out");
   }
@@ -107,9 +107,9 @@ function init() {
       event,
       element: 버튼
   }) {
-      const liElement2 = 버튼.closest(".menu-list-item");
+      const liElement = 버튼.closest(".menu-list-item");
       if (confirm('삭제하시겠습니까?')) { // true면
-          liElement2.remove(); //타겟 li 삭제
+          liElement.remove(); //타겟 li 삭제
           renderCounter();
       }
   }
