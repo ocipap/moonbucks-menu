@@ -185,7 +185,7 @@ function addMenu() {
       name: 'cool-jung'
   };
   const copyEspressoMenuList = [...espressoMenuList.espresso,newMenu];
-  localStorageSetItem({espresso,copyEspressoMenuList});
+  localStorageSetItem({key:'espresso',val:copyEspressoMenuList});
 }
 addMenu();
 
@@ -199,7 +199,7 @@ function removeMenu() {
   });
   console.log(removeMenuList);
   
-  localStorageSetItem({espresso,removeMenuList});
+  localStorageSetItem({key:'espresso',val:removeMenuList});
 }
 removeMenu();
 
@@ -211,7 +211,7 @@ function editMenu(){
       name: 'luya'
   };
   const updatedName = espressoMenuList.espresso.map((element)=>{
-      element.id == 2 ? {...element, name: editMenu.name} : element;
+      return element.id == 2 ? {...element, name: editMenu.name} : element;
   });
   console.log(updatedName);
   localStorageSetItem({key:'espresso', val:updatedName});
