@@ -107,11 +107,11 @@ function init() {
       event,
       element: 버튼
   }) {
-      const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
+      const menuData = JSON.parse(localStorage.getItem('menuData'));
       const liElement = 버튼.closest(".menu-list-item");
       console.log(liElement.id);
       console.log(typeof liElement.id);
-      const removeMenuList = espressoMenuList.espresso.filter((element)=>{
+      const removeMenuList = menuData.espresso.filter((element)=>{
           return element.id !== parseInt(liElement.id);
       });
       localStorageSetItem({key:'espresso',val:removeMenuList});
@@ -125,7 +125,7 @@ function init() {
   function submitHandler(event) {
       event.preventDefault();
 
-      const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
+      const menuData = JSON.parse(localStorage.getItem('menuData'));
       const input = document.querySelector("#espresso-menu-name");
       const inputValue = input.value.trim();
       if (inputValue.length === 0) {
@@ -137,8 +137,8 @@ function init() {
           name: inputValue
       };
 
-      const copyEspressoMenuList = [...espressoMenuList.espresso,newMenu];
-      localStorageSetItem({key:'espresso',val:copyEspressoMenuList});
+      const copymenuData = [...menuData.espresso,newMenu];
+      localStorageSetItem({key:'espresso',val:copymenuData});
 
       menuList.insertAdjacentElement(
           "afterbegin",
@@ -195,23 +195,23 @@ loadMenu();
 
 // 메뉴추가
 function addMenu() {
-  const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
+  const menuData = JSON.parse(localStorage.getItem('menuData'));
   
   const newMenu = {
       id: 3,
       name: 'cool-jung'
   };
-  const copyEspressoMenuList = [...espressoMenuList.espresso,newMenu];
-  localStorageSetItem({key:'espresso',val:copyEspressoMenuList});
+  const copymenuData = [...menuData.espresso,newMenu];
+  localStorageSetItem({key:'espresso',val:copymenuData});
 }
 addMenu();
 
 // 메뉴 삭제
 function removeMenu() {
-  const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
-  console.log(espressoMenuList.espresso);
+  const menuData = JSON.parse(localStorage.getItem('menuData'));
+  console.log(menuData.espresso);
   const deleteMenuId = 1;
-  const removeMenuList = espressoMenuList.espresso.filter((element)=>{
+  const removeMenuList = menuData.espresso.filter((element)=>{
       return element.id !== deleteMenuId;
   });
   console.log(removeMenuList);
@@ -222,12 +222,12 @@ removeMenu();
 
 // 메뉴 수정
 function editMenu(){
-  const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
+  const menuData = JSON.parse(localStorage.getItem('menuData'));
   const editMenu = {
       id: 2,
       name: 'luya'
   };
-  const updatedName = espressoMenuList.espresso.map((element)=>{
+  const updatedName = menuData.espresso.map((element)=>{
       return element.id == 2 ? {...element, name: editMenu.name} : element;
   });
   console.log(updatedName);
@@ -237,9 +237,9 @@ editMenu();
 
 // 로깅
 function loging(){
-  const espressoMenuList = JSON.parse(localStorage.getItem('menuData'));
+  const menuData = JSON.parse(localStorage.getItem('menuData'));
 
-  console.log(espressoMenuList);
+  console.log(menuData);
 }
 
 function localStorageSetItem({key,val}){
