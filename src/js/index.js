@@ -2,9 +2,9 @@ function counterTmpl(count) {
   return `<span>총 ${count}개</span>`;
 }
 
-function menuItemTmpl(name) {
-  return `<li class="menu-list-item d-flex items-center py-2">
-<span class="w-100 pl-2 menu-name">${name}</span>
+function menuItemTmpl({ id, name, soldout }) {
+  return `<li class="menu-list-item d-flex items-center py-2" id="${id}">
+<span class="w-100 pl-2 menu-name ${soldout ? 'sold-out' : ''}">${name}</span>
 <button
   type="button"
   class="bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button"
@@ -80,14 +80,32 @@ function init() {
       menuCount.innerHTML = counterTmpl(counter);
   }
 
-  function soldOutHandler({
-      event,
-      element: 버튼
-  }) {
-      const liElement = 버튼.closest(".menu-list-item");
-      const nameElement2 = liElement.querySelector(".menu-name");
 
-      nameElement2.classList.add("sold-out");
+  // 금방
+  function soldOutHandler({ event, element: 버튼 }) {
+    const liElement = 버튼.closest(".menu-list-item");
+    const nameElement2 = liElement.querySelector(".menu-name");
+
+    // toggle
+    nameElement2.classList.toggle("sold-out");
+    console.log(nameElement2.classList.contains('sold-out'));
+    // localstorage 값 변경
+    const menuData = JSON.parse(localStorage.getItem("menuData"));
+    const soldOutList = menuData.espresso.map((menu)=>{
+      console.log(nameElement2.classList.contains('sold-out'));
+      console.log(menu.id);
+      console.log(liElement.id);
+      if(nameElement2.classList.contains('sold-out') && menu.id === Number(liElement.id)){
+        return { ...menu, soldout: true };
+      }else{
+        return { ...menu, soldout: false };
+      }
+      
+    });  
+    console.log(soldOutList);
+    localStorageSetItem({key:"espresso", val: soldOutList});
+
+
   }
 
   function editHandler({
@@ -100,7 +118,24 @@ function init() {
       let editVal = prompt("무엇으로 바꾸시겠습니까?", ""); //prompt 출력
       if (editVal != null) { // 값이 없지 않으면
           nameElement.innerHTML = editVal; //자식(span)에 editVal의 값 대입
+    }
+
+    // 엘리먼트와 -> 수정 완료
+
+    // 실제 localstorage data -> 지금 해야되는거죠?
+    // 저장되어있는 데이터 가져오기
+    const menuData = JSON.parse(localStorage.getItem("menuData"));
+    // 수정해야 되는 친구찾기
+
+    // 바꾸기
+    const editMenuList = menuData.espresso.map((menu)=>{
+      if (menu.id === liElement.id) {
+        return { ...menu, name: editVal };
       }
+      return menu;
+    });
+    
+    localStorageSetItem({ key: "espresso", val: editMenuList });
   }
 
   function removeHandler({
@@ -142,14 +177,27 @@ function init() {
 
       menuList.insertAdjacentElement(
           "afterbegin",
-          createElement(menuItemTmpl(inputValue))
+          createElement(menuItemTmpl(newMenu))
       );
 
       input.value = "";
 
       renderCounter();
   }
-  //품절
+
+  // 화면 처음 렌더링 하는 시점에 그려야하는 것들
+  function initRender() {
+    const menuData = JSON.parse(localStorage.getItem("menuData"));
+
+    menuData.espresso.forEach(function (menu) {
+      menuList.insertAdjacentElement(
+        "afterbegin",
+        createElement(menuItemTmpl(menu))
+      );
+    });
+  }
+
+  // 품절
   delegate("click", ".menu-sold-out-button", soldOutHandler, menuList);
 
   // 수정을 하면은 prompt 가 뜨고 이후 수정후에 해당 돔이 변경
@@ -160,12 +208,13 @@ function init() {
 
   form.addEventListener("submit", submitHandler);
   submitBtn.addEventListener("click", submitHandler);
+
+  initRender();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   init();
 });
-
 
 // delegate 함수 구현 (중간중간 console.log) 고도화
 
@@ -175,73 +224,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 생활코딩 git 수업
 
-// 페이지를 로드
-function loadMenu() {
-  localStorage.setItem('menuData', JSON.stringify({
-      espresso: [{
-          id: 1,
-          name: 'papico'
-      }, {
-          id: 2,
-          name: 'siwon'
-      }]
-  }));
 
-  loging();
+function localStorageSetItem({ key, val }) {
+  localStorage.setItem("menuData", JSON.stringify({ [key]: val }));
 }
 
-loadMenu();
+
+// dataset 
+// 기존에 id 로 넣어던 템플릿을 -> data-id 로 변경 하고 동작 테스트
 
 
-// 메뉴추가
-function addMenu() {
-  const menuData = JSON.parse(localStorage.getItem('menuData'));
-  
-  const newMenu = {
-      id: 3,
-      name: 'cool-jung'
-  };
-  const copymenuData = [...menuData.espresso,newMenu];
-  localStorageSetItem({key:'espresso',val:copymenuData});
-}
-addMenu();
+[{ id: 1, name: 'papico', soldout: false }]
 
-// 메뉴 삭제
-function removeMenu() {
-  const menuData = JSON.parse(localStorage.getItem('menuData'));
-  console.log(menuData.espresso);
-  const deleteMenuId = 1;
-  const removeMenuList = menuData.espresso.filter((element)=>{
-      return element.id !== deleteMenuId;
-  });
-  console.log(removeMenuList);
-  
-  localStorageSetItem({key:'espresso',val:removeMenuList});
-}
-removeMenu();
+// localstorage
 
-// 메뉴 수정
-function editMenu(){
-  const menuData = JSON.parse(localStorage.getItem('menuData'));
-  const editMenu = {
-      id: 2,
-      name: 'luya'
-  };
-  const updatedName = menuData.espresso.map((element)=>{
-      return element.id == 2 ? {...element, name: editMenu.name} : element;
-  });
-  console.log(updatedName);
-  localStorageSetItem({key:'espresso', val:updatedName});
-}
-editMenu();
-
-// 로깅
-function loging(){
-  const menuData = JSON.parse(localStorage.getItem('menuData'));
-
-  console.log(menuData);
-}
-
-function localStorageSetItem({key,val}){
-  localStorage.setItem('menuData',JSON.stringify({[key]:val}));
-} 
+// 돔데이터
