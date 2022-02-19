@@ -87,17 +87,35 @@ function init(){
     function editHandler({event, element}){
         const liElement = element.closest(".menu-list-item");
         const menuName = liElement.querySelector(".menu-name");
+        const menudata = JSON.parse(localStorage.getItem("menudata"));
 
         let editVal = prompt("무엇으로 바꾸시겠습니까?","");
         if(editVal.length === 0){
             return;
         }
         menuName.innerText = editVal;
+        const editMenuList = menudata.espresso.map((element)=>{
+            console.log(typeof parseInt(liElement.id));
+            console.log(typeof element.id);
+            if(parseInt(liElement.id) === element.id){
+                return {...element, name: editVal};
+            }return element;
+        });
+        setItem({key:'espresso',val:editMenuList});
     }
 
     function removeHandler({event,element}){
+        const menudata = JSON.parse(localStorage.getItem("menudata"));
         const liElement = element.closest(".menu-list-item");
         
+        //클릭한 엘리먼트의 아이디와 로컬스토리지 아이디가 같지 않으면 같은조건만 남기기(filter)
+        const removeMenuList = menudata.espresso.filter((element)=>{
+            console.log(typeof parseInt(liElement.id));
+            console.log(typeof element.id);
+            return parseInt(liElement.id) !== element.id;
+        });
+        setItem({key:'espresso',val:removeMenuList});
+        //로컬스토리지 다시 저장
         const removeMenu = confirm("삭제하시겠습니까?");
         if(removeMenu){liElement.remove();}
         counter();
@@ -124,6 +142,15 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
+localStorage.setItem('menudata', JSON.stringify({
+    espresso: [{
+        id: 1111,
+        name: 'LUYA'
+    }, {
+        id: 2222,
+        name: 'COOKIE'
+    }]
+}));
 
 function setItem({key,val}){
     localStorage.setItem("menudata",JSON.stringify({[key]:val}));
