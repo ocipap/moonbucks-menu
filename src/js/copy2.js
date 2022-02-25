@@ -138,20 +138,50 @@ function init() {
         funcsetItem({key:'espresso',val:removeMenuList});
     }
 
+
+    //1. 품절 시킬 것 찾기
+
+        // 품절 시킬 대상
+            // 기존 품절이 이었는지
+                // 품절 해제
+                // 품절
+
+        // 품절 시킬 대상 -> 그대로
+
     //====메뉴품절 함수====
+
+
+    // 돔 업데이트, 돔 기반으로 데이터 업데이트
+    // 하나의 데이터 기반으로 돔 업데이트, 데이터 업데이트
+
     function soldOutHandler({event,element}){
         const liElement = element.closest(".menu-list-item");
         const menuName = liElement.querySelector(".menu-name");
-        menuName.classList.toggle("sold-out");//품절버튼 클릭하면 표시 껐다/켰다 
+
+        const prevSoldoutState = menuName.classList.contains("sold-out");
+
+        if (prevSoldoutState) {
+            menuName.classList.remove("sold-out");//품절버튼 클릭하면 표시 껐다/켰다 
+        }
+        else {   
+            menuName.classList.add("sold-out");//품절버튼 클릭하면 표시 껐다/켰다 
+        }
 
         const savemenu = JSON.parse(localStorage.getItem("savemenu"));
-        //1. 품절 시킬 것 찾기
+        
+
+
         const soldOutList = savemenu.espresso.map((menu)=>{
-            //2. 품절 시킬 거 표시해주기
-            if(menuName.classList.contains('sold-out')&& parseInt(liElement.id) === menu.id){
-                return {...menu,soldout: true};    
-            }else{
-                return {...menu,soldout: false};
+            if (parseInt(liElement.id) === menu.id) {
+                if (!prevSoldoutState) {
+                    return {...menu,soldout: true};
+                }
+                else {
+                    return {...menu,soldout: false};
+                }
+            }
+            else {
+                return menu;
             }
         });
         funcsetItem({key:'espresso',val:soldOutList});
